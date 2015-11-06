@@ -61,7 +61,7 @@ h1 {
 </head>
 
 <body>
-  <h1>Traffic Light Pattern Build-o-Matic</h1>
+  <h1>Traffic Light Pattern Build-o-Matic 3000</h1>
   <div class="blah">
     <fieldset>
       <legend>Pattern</legend>
@@ -78,7 +78,11 @@ h1 {
       <button class="all-off">All Off</button>
       <button class="all-on">All On</button>
       <button class="invert">Invert</button>
-      <button class="rotate">Rotate</button>
+    </fieldset>
+    <fieldset>
+      <legend>Rotate</legend>
+      <button class="rotate" data-direction="forward">Clockwise</button>
+      <button class="rotate" data-direction="backward">Anti-Clockwise</button>
     </fieldset>
     <fieldset>
       <legend>Pattern Data</legend>
@@ -98,9 +102,14 @@ h1 {
   $(document).ready(function() {
       var loop = false, sequenceId = 0;
 
-      var rotation = [
-            0, 11, 6, 1, 2, 3, 16, 12, 7, 8, 4, 21, 17, 13, 9, 5, 22, 18, 19, 14, 10, 23, 24, 25, 20, 15
-          ];
+      var rotation = {
+            backward: [
+                0, 3, 4, 5, 10, 15, 2, 8, 9, 14, 20, 1, 7, 13, 19, 25, 6, 12, 17, 18, 24, 11, 16, 21, 22, 23
+            ],
+            forward: [
+                0, 11, 6, 1, 2, 3, 16, 12, 7, 8, 4, 21, 17, 13, 9, 5, 22, 18, 19, 14, 10, 23, 24, 25, 20, 15
+            ]
+          };
 
       function createPixel(LEDclass, index) {
           return $('<div class="' + LEDclass + ' pixel" data-index="'+ index +'"> <input type="checkbox" name="led_' + index + '" value="1"><\/div>');
@@ -166,7 +175,7 @@ h1 {
           } else if (loop) {
               sequenceId = setTimeout(animate, speed, pattern, 0, speed);
           } else {
-              clearScreen();
+              sequenceId = setTimeout(clearScreen, speed);
           }
       }
 
@@ -185,6 +194,17 @@ h1 {
       function clearScreen() {
           $pixels.removeClass('selected');
           $inputs.prop('checked', false);
+      }
+
+      function getSequence() {
+          return $result.val().trim().replace(/([\{\}]|0b|,| )/g, '').split('\n').filter(function(item) { return item; });
+      }
+
+      function reportFrames() {
+           var nFrames = $result.val().trim().split('\n').filter(function(item) { return item; }).length;
+
+           $('span.n-frames').text(nFrames);
+           $('span.run-time').text((nFrames * 500) / 1000)
       }
 
       // Render
@@ -232,32 +252,31 @@ h1 {
 
       // Rotate button
       $('button.rotate').on('click', function() {
-          $leds = $pixels.filter('.selected');
+          var $leds = $pixels.filter('.selected'),
+              direction = $(this).data('direction');
 
           clearScreen();
 
           $leds.each(function() {
               var index = $(this).data('index');
 
-              $pixels.filter('[data-index="' + rotation[index] + '"]').click();
+              $pixels.filter('[data-index="' + rotation[direction][index] + '"]').click();
           });
       });
 
       // Mirror button
       $('button.mirror').on('click', function() {
           var reversed = $result.val().trimRight().split('\n').reverse();
-          $result.val( $result.val() + reversed.join('\n') );
+          $result.val( $result.val() + reversed.join('\n') + '\n' );
 
-           var nFrames = $result.val().trimRight().split('\n').length;
-           $('span.n-frames').text(nFrames);
-           $('span.run-time').text((nFrames * 500) / 1000)
+          reportFrames();
       });
 
       // Play in a loop button
       $('button.play').on('click', function() {
           loop = true;
           clearTimeout(sequenceId);
-          $replay.click();
+          animate(getSequence(), 0, 500);
       });
 
       // Stop playback
@@ -269,8 +288,9 @@ h1 {
 
       // Play one run
       $replay.on('click', function() {
-          var sequence = $result.val().trim().replace(/([\{\}]|0b|,| )/g, '').split('\n');
-          animate(sequence, 0, 500);
+          loop = false;
+          clearTimeout(sequenceId);
+          animate(getSequence(), 0, 500);
       });
 
       // Save a frame
@@ -300,16 +320,10 @@ h1 {
 
            $result.val($result.val() + output + '\n');
 
-           var nFrames = $result.val().trimRight().split('\n').length;
-           $('span.n-frames').text(nFrames);
-           $('span.run-time').text((nFrames * 500) / 1000)
-       });
+          reportFrames();
+      });
 
-       $('textarea').on('keyup', function() {
-           var nFrames = $result.val().trimRight().split('\n').length;
-           $('span.n-frames').text(nFrames);
-           $('span.run-time').text((nFrames * 500) / 1000)
-       });
+      $('textarea').on('keyup input', reportFrames);
   });
   </script>
 
