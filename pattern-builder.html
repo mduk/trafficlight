@@ -276,13 +276,13 @@ h1 {
               }
           }
 
-          function render( leds ) {
+          function render( frame ) {
               var $fields = $('.field');
               $fields.removeClass('selected');
               $fields.each(function() {
                 var $field = $(this);
 
-                if (+leds[$field.data('index') - 1]) {
+                if (+frame[$field.data('index') - 1]) {
                   $field.addClass('selected');
                 }
               });
