@@ -78,6 +78,7 @@ h1 {
       <button class="all-off">All Off</button>
       <button class="all-on">All On</button>
       <button class="invert">Invert</button>
+      <button class="rotate">Rotate</button>
     </fieldset>
     <fieldset>
       <legend>Pattern Data</legend>
@@ -96,7 +97,7 @@ h1 {
       var loop = false, sequenceId = 0;
 
       var rotation = [
-
+            0, 11, 6, 1, 2, 3, 16, 12, 7, 8, 4, 21, 17, 13, 9, 5, 22, 18, 19, 14, 10, 23, 24, 25, 20, 15
           ];
 
       function createPixel(LEDclass, index) {
@@ -162,6 +163,8 @@ h1 {
               sequenceId = setTimeout(animate, speed, pattern, frame + 1, speed);
           } else if (loop) {
               sequenceId = setTimeout(animate, speed, pattern, 0, speed);
+          } else {
+              clearScreen();
           }
       }
 
@@ -175,6 +178,11 @@ h1 {
               $pixel.addClass('selected');
             }
           });
+      }
+
+      function clearScreen() {
+          $pixels.removeClass('selected');
+          $inputs.prop('checked', false);
       }
 
       // Render
@@ -221,6 +229,19 @@ h1 {
       });
 
       // Duplicate-and-Reverse button
+      $('button.rotate').on('click', function() {
+          $leds = $pixels.filter('.selected');
+
+          clearScreen();
+
+          $leds.each(function() {
+              var index = $(this).data('index');
+
+              $pixels.filter('[data-index="' + rotation[index] + '"]').click();
+          });
+      });
+
+      // Duplicate-and-Reverse button
       $('button.mirror').on('click', function() {
           var reversed = $result.val().trimRight().split('\n').reverse();
           $result.val( $result.val() + reversed.join('\n') );
@@ -229,6 +250,7 @@ h1 {
       // Play in a loop button
       $('button.play').on('click', function() {
           loop = true;
+          clearTimeout(sequenceId);
           $replay.click();
       });
 
@@ -236,6 +258,7 @@ h1 {
       $('button.stop').on('click', function() {
           loop = false;
           clearTimeout(sequenceId);
+          clearScreen();
       });
 
       // Play one run
