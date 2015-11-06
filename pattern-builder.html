@@ -95,23 +95,18 @@ h1 {
   $(document).ready(function() {
       var loop = false, sequenceId = 0;
 
-      function createOuterPixels() {
-          var container = $('#container');
-          var values = [15, 10, 5, 4, 3, 2, 1, 6, 11, 16, 21, 22, 23, 24, 25, 20];
-          for(var i = 0; i < 16; i++) {
-              createPixel('outerPixel', values[i]).appendTo(container);
-          }
+      var rotation = [
+
+          ];
+
+      function createPixel(LEDclass, index) {
+          return $('<div class="' + LEDclass + ' pixel" data-index="'+ index +'"> <input type="checkbox" name="led_' + index + '" value="1"><\/div>');
       }
 
-      function distributeOuterPixels() {
-          var radius = 400;
-          var pixels = $('.outerPixel'), container = $('#container'),
-              width = container.width(), height = container.height(),
-              angle = 0, step = (2*Math.PI) / pixels.length;
-
-          pixels.each(function() {
-              var x = Math.round(width/2 + radius * Math.cos(angle) - $(this).width()/2);
-              var y = Math.round(height/2 + radius * Math.sin(angle) - $(this).height()/2);
+      function translatePixel(options) {
+          return function() {
+              var x = Math.round(options.width/2 + options.radius * Math.cos(options.angle) - $(this).width()/2);
+              var y = Math.round(options.height/2 + options.radius * Math.sin(options.angle) - $(this).height()/2);
               if(window.console) {
                   console.log($(this).text(), x, y);
               }
@@ -119,8 +114,29 @@ h1 {
                   left: x + 'px',
                   top: y + 'px'
               });
-              angle += step;
-          });
+              options.angle += options.step;
+          };
+      }
+
+      function distributePixels(type, radius) {
+          var pixels = $(type), container = $('#container'),
+              options = {
+                radius: radius,
+                width: container.width(),
+                height: container.height(),
+                angle: 0,
+                step: (2*Math.PI) / pixels.length
+              };
+
+          pixels.each(translatePixel(options));
+      }
+
+      function createOuterPixels() {
+          var container = $('#container');
+          var values = [15, 10, 5, 4, 3, 2, 1, 6, 11, 16, 21, 22, 23, 24, 25, 20];
+          for(var i = 0; i < 16; i++) {
+              createPixel('outerPixel', values[i]).appendTo(container);
+          }
       }
 
       function createMiddlePixels() {
@@ -131,56 +147,12 @@ h1 {
           }
       }
 
-      function distributeMiddlePixels() {
-          var radius = 200;
-          var pixels = $('.middlePixel'), container = $('#container'),
-              width = container.width(), height = container.height(),
-              angle = 0, step = (2*Math.PI) / pixels.length;
-
-          pixels.each(function() {
-              var x = Math.round(width/2 + radius * Math.cos(angle) - $(this).width()/2);
-              var y = Math.round(height/2 + radius * Math.sin(angle) - $(this).height()/2);
-              if(window.console) {
-                  console.log($(this).text(), x, y);
-              }
-              $(this).css({
-                  left: x + 'px',
-                  top: y + 'px'
-              });
-              angle += step;
-          });
-      }
-
       function createInnerPixels() {
           var container = $('#container');
           var values = [13];
           for(var i = 0; i < 1; i++) {
               createPixel('innerPixel', values[i]).appendTo(container);
           }
-      }
-
-      function createPixel(LEDclass, index) {
-          return $('<div class="' + LEDclass + ' pixel" data-index="'+ index +'"> <input type="checkbox" name="led_' + index + '" value="1"><\/div>');
-      }
-
-      function distributeInnerPixels() {
-          var radius = 0;
-          var pixels = $('.innerPixel'), container = $('#container'),
-              width = container.width(), height = container.height(),
-              angle = 0, step = (2*Math.PI) / pixels.length;
-
-          pixels.each(function() {
-              var x = Math.round(width/2 + radius * Math.cos(angle) - $(this).width()/2);
-              var y = Math.round(height/2 + radius * Math.sin(angle) - $(this).height()/2);
-              if(window.console) {
-                  console.log($(this).text(), x, y);
-              }
-              $(this).css({
-                  left: x + 'px',
-                  top: y + 'px'
-              });
-              angle += step;
-          });
       }
 
       function animate(pattern, frame, speed) {
@@ -207,13 +179,13 @@ h1 {
 
       // Render
       createOuterPixels();
-      distributeOuterPixels();
+      distributePixels('.outerPixel', 400);
 
       createMiddlePixels();
-      distributeMiddlePixels();
+      distributePixels('.middlePixel', 200);
 
       createInnerPixels();
-      distributeInnerPixels();
+      distributePixels('.innerPixel', 0);
 
       var $inputs = $('input'),
           $pixels = $('.pixel'),
