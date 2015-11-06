@@ -83,8 +83,9 @@ h1 {
     <fieldset>
       <legend>Pattern Data</legend>
       <textarea name="name" rows="16" cols="55"></textarea><br/>
-      <button class="mirror">Mirror</button>
-      <span class="n-frames"></span> frames.
+      <button class="mirror">Mirror</button><br/>
+      <span class="n-frames"></span> frames.<br/>
+      <span class="run-time"></span> seconds.<br/>
     </fieldset>
   </div>
 
@@ -247,7 +248,9 @@ h1 {
           var reversed = $result.val().trimRight().split('\n').reverse();
           $result.val( $result.val() + reversed.join('\n') );
 
-          $('span.n-frames').text($result.val().trimRight().split('\n').length);
+           var nFrames = $result.val().trimRight().split('\n').length;
+           $('span.n-frames').text(nFrames);
+           $('span.run-time').text((nFrames * 500) / 1000)
       });
 
       // Play in a loop button
@@ -297,11 +300,15 @@ h1 {
 
            $result.val($result.val() + output + '\n');
 
-           $('span.n-frames').text($result.val().trimRight().split('\n').length);
+           var nFrames = $result.val().trimRight().split('\n').length;
+           $('span.n-frames').text(nFrames);
+           $('span.run-time').text((nFrames * 500) / 1000)
        });
 
        $('textarea').on('keyup', function() {
-           $('span.n-frames').text($result.val().trimRight().split('\n').length);
+           var nFrames = $result.val().trimRight().split('\n').length;
+           $('span.n-frames').text(nFrames);
+           $('span.run-time').text((nFrames * 500) / 1000)
        });
   });
   </script>
