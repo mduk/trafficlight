@@ -80,7 +80,7 @@ h1 {
     <fieldset>
       <legend>Pattern Data</legend>
       <textarea name="name" rows="16" cols="55"></textarea><br/>
-      <button class="duplicate-and-reverse">Duplicate and Reverse</button>
+      <button class="mirror">Mirror</button>
     </fieldset>
   </div>
 
@@ -235,7 +235,7 @@ h1 {
     });
 
     // Duplicate-and-Reverse button
-    $('button.duplicate-and-reverse').on('click', function() {
+    $('button.mirror').on('click', function() {
       var $textarea = $('textarea');
       var reversed = $textarea.val().trimRight().split('\n').reverse();
       $textarea.val( $textarea.val() + reversed.join('\n') );
