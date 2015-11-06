@@ -255,29 +255,17 @@ h1 {
            });
 
           $replay.on('click', function() {
-             var sequence = $result.val().replace(/([\{\}]|0b|,)/g, '').split('\n');
-
-             sequence = sequence.map(function(frame) {
-               console.log( "frame: ", frame );
-               return frame.split(' ').splice(3, 4);
-             });
-
-             sequence.pop();
-
+             var sequence = $result.val().trim().replace(/([\{\}]|0b|,| )/g, '').split('\n');
              animate(sequence, 0);
            });
 
           var SPEED = 500;
 
-          function animate(sequence, index) {
-              console.log( "Animate tick: ", index );
-              var leds = sequence[index].join('').split('');
-              console.log( leds );
+          function animate(pattern, frame) {
+              render( pattern[frame] );
 
-              render( leds );
-
-              if (index + 1 < sequence.length) {
-                setTimeout(animate, SPEED, sequence, index + 1);
+              if (frame + 1 < pattern.length) {
+                setTimeout(animate, SPEED, pattern, frame + 1);
               }
               else {
                 setTimeout( function() {
@@ -296,10 +284,6 @@ h1 {
                   $field.addClass('selected');
                 }
               });
-          }
-
-          function parseLine( line ) {
-
           }
 
        });
