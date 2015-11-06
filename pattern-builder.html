@@ -175,6 +175,26 @@ h1 {
       });
   }
 
+  function animate(pattern, frame, time) {
+      render( pattern[frame] );
+
+      if (frame + 1 < pattern.length) {
+        setTimeout(animate, time, pattern, frame + 1, time);
+      }
+  }
+
+  function render( frame ) {
+      var $pixels = $('.pixel');
+      $pixels.removeClass('selected');
+      $pixels.each(function() {
+        var $pixel = $(this);
+
+        if (+frame[$pixel.data('index') - 1]) {
+          $pixel.addClass('selected');
+        }
+      });
+  }
+
   createOuterPixels();
   distributeOuterPixels();
 
@@ -256,35 +276,8 @@ h1 {
 
           $replay.on('click', function() {
              var sequence = $result.val().trim().replace(/([\{\}]|0b|,| )/g, '').split('\n');
-             animate(sequence, 0);
+             animate(sequence, 0, 500);
            });
-
-          var SPEED = 500;
-
-          function animate(pattern, frame) {
-              render( pattern[frame] );
-
-              if (frame + 1 < pattern.length) {
-                setTimeout(animate, SPEED, pattern, frame + 1);
-              }
-              else {
-                setTimeout( function() {
-                  $pixels.removeClass('selected');
-	}, SPEED );
-              }
-          }
-
-          function render( frame ) {
-              var $pixels = $('.pixel');
-              $pixels.removeClass('selected');
-              $pixels.each(function() {
-                var $pixel = $(this);
-
-                if (+frame[$pixel.data('index') - 1]) {
-                  $pixel.addClass('selected');
-                }
-              });
-          }
 
        });
   </script>
