@@ -197,7 +197,14 @@ h1 {
       }
 
       function getSequence() {
-          return $result.val().trim().replace(/([\{\}]|0b|,| )/g, '').split('\n');
+          return $result.val().trim().replace(/([\{\}]|0b|,| )/g, '').split('\n').filter(function(item) { return item; });
+      }
+
+      function reportFrames() {
+           var nFrames = $result.val().trim().split('\n').filter(function(item) { return item; }).length;
+
+           $('span.n-frames').text(nFrames);
+           $('span.run-time').text((nFrames * 500) / 1000)
       }
 
       // Render
@@ -260,11 +267,9 @@ h1 {
       // Mirror button
       $('button.mirror').on('click', function() {
           var reversed = $result.val().trimRight().split('\n').reverse();
-          $result.val( $result.val() + reversed.join('\n') );
+          $result.val( $result.val() + reversed.join('\n') + '\n' );
 
-           var nFrames = $result.val().trimRight().split('\n').length;
-           $('span.n-frames').text(nFrames);
-           $('span.run-time').text((nFrames * 500) / 1000)
+          reportFrames();
       });
 
       // Play in a loop button
@@ -315,16 +320,10 @@ h1 {
 
            $result.val($result.val() + output + '\n');
 
-           var nFrames = $result.val().trimRight().split('\n').length;
-           $('span.n-frames').text(nFrames);
-           $('span.run-time').text((nFrames * 500) / 1000)
-       });
+          reportFrames();
+      });
 
-       $('textarea').on('keyup input', function() {
-           var nFrames = $result.val().trimRight().split('\n').length;
-           $('span.n-frames').text(nFrames);
-           $('span.run-time').text((nFrames * 500) / 1000)
-       });
+      $('textarea').on('keyup input', reportFrames);
   });
   </script>
 
