@@ -1,0 +1,309 @@
+<html>
+<head>
+
+<style>
+
+body {
+  padding: 20px;
+  background: black;
+  color: #DDD;
+}
+
+#container {
+  width: 1000px;
+  height: 1250px;
+  /*margin: 0 auto;*/
+  position: relative;
+}
+.outerField,
+.middleField,
+.innerField {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  border-radius: 50%;
+  /*background: rgb(199, 62, 64);*/
+  background: black;
+  border: 1px white solid;
+}
+
+button {
+  height: 60px;
+  width: 120px;
+  font-weight: bold;
+}
+
+input {
+  visibility: hidden;
+}
+
+textarea {
+  font-family: monospace;
+}
+
+.blah {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.selected {
+  /*background: rgb(132, 191, 114) !important;*/
+  background: white !important;
+}
+
+h1 {
+  margin: auto;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+</style>
+
+</head>
+
+<body>
+  <h1>Traffic Light Pattern Build-o-Matic</h1>
+  <div class="blah">
+    <fieldset>
+      <legend>Pattern</legend>
+      <button class="save-frame">Save Frame</button>
+    </fieldset>
+    <fieldset>
+      <legend>Preview</legend>
+      <button class="replay">Preview</button>
+    </fieldset>
+    <fieldset>
+      <legend>Selection</legend>
+      <button class="all-off">All Off</button>
+      <button class="all-on">All On</button>
+      <button class="invert">Invert</button>
+    </fieldset>
+    <fieldset>
+      <legend>Pattern Data</legend>
+      <textarea name="name" rows="16" cols="55"></textarea><br/>
+      <button class="duplicate-and-reverse">Duplicate and Reverse</button>
+    </fieldset>
+  </div>
+
+
+  <div id="container">
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
+
+  <script type="text/javascript">
+  function createOuterFields() {
+      var container = $('#container');
+      var values = [15, 10, 5, 4, 3, 2, 1, 6, 11, 16, 21, 22, 23, 24, 25, 20];
+      for(var i = 0; i < 16; i++) {
+          createField('outerField', values[i]).appendTo(container);
+      }
+  }
+
+  function distributeOuterFields() {
+      var radius = 400;
+      var fields = $('.outerField'), container = $('#container'),
+          width = container.width(), height = container.height(),
+          angle = 0, step = (2*Math.PI) / fields.length;
+      fields.each(function() {
+          var x = Math.round(width/2 + radius * Math.cos(angle) - $(this).width()/2);
+          var y = Math.round(height/2 + radius * Math.sin(angle) - $(this).height()/2);
+          if(window.console) {
+              console.log($(this).text(), x, y);
+          }
+          $(this).css({
+              left: x + 'px',
+              top: y + 'px'
+          });
+          angle += step;
+      });
+  }
+
+  function createMiddleFields() {
+      var container = $('#container');
+      var values = [14, 9, 8, 7, 12, 17, 18, 19];
+      for(var i = 0; i < 8; i++) {
+          createField('middleField', values[i]).appendTo(container);
+      }
+  }
+
+  function distributeMiddleFields() {
+      var radius = 200;
+      var fields = $('.middleField'), container = $('#container'),
+          width = container.width(), height = container.height(),
+          angle = 0, step = (2*Math.PI) / fields.length;
+      fields.each(function() {
+          var x = Math.round(width/2 + radius * Math.cos(angle) - $(this).width()/2);
+          var y = Math.round(height/2 + radius * Math.sin(angle) - $(this).height()/2);
+          if(window.console) {
+              console.log($(this).text(), x, y);
+          }
+          $(this).css({
+              left: x + 'px',
+              top: y + 'px'
+          });
+          angle += step;
+      });
+  }
+
+  function createInnerFields() {
+      var container = $('#container');
+      var values = [13];
+      for(var i = 0; i < 1; i++) {
+          createField('innerField', values[i]).appendTo(container);
+      }
+  }
+
+  function createField(LEDclass, index) {
+    return $('<div class="' + LEDclass + ' field" data-index="'+ index +'"> <input type="checkbox" name="led_' + index + '" value="1"></div>');
+  }
+
+  function distributeInnerFields() {
+      var radius = 0;
+      var fields = $('.innerField'), container = $('#container'),
+          width = container.width(), height = container.height(),
+          angle = 0, step = (2*Math.PI) / fields.length;
+      fields.each(function() {
+          var x = Math.round(width/2 + radius * Math.cos(angle) - $(this).width()/2);
+          var y = Math.round(height/2 + radius * Math.sin(angle) - $(this).height()/2);
+          if(window.console) {
+              console.log($(this).text(), x, y);
+          }
+          $(this).css({
+              left: x + 'px',
+              top: y + 'px'
+          });
+          angle += step;
+      });
+  }
+
+  createOuterFields();
+  distributeOuterFields();
+
+  createMiddleFields();
+  distributeMiddleFields();
+
+  createInnerFields();
+  distributeInnerFields();
+
+  $(document).ready(function() {
+
+    // When a circle is clicked, toggle it's invisible checkbox
+    $('.field').on('click', function() {
+      $(this).toggleClass('selected');
+      var $input = $(this).find('input');
+
+      $input.prop('checked', !$input.prop('checked'));
+    });
+
+    // All Off button
+    $('button.all-off').on('click', function() {
+      $('.field').removeClass('selected');
+      $('input').prop('checked', false);
+    });
+
+    // All On button
+    $('button.all-on').on('click', function() {
+      $('.field').addClass('selected');
+      $('input').prop('checked', true);
+    });
+
+    $('button.duplicate-and-reverse').on('click', function() {
+      var $textarea = $('textarea');
+      var reversed = $textarea.val().trimRight().split('\n').reverse();
+      $textarea.val( $textarea.val() + reversed.join('\n') );
+    });
+
+    $('button.invert').on('click', function() {
+      $('.field').toggleClass('selected');
+      $('input').each( function() {
+        $(this).prop('checked', !$(this).prop('checked'));
+      } );
+    });
+
+           var $inputs = $('input'),
+               $fields = $('.field'),
+               $submit = $('button.save-frame'),
+               $replay = $('button.replay'),
+               $result = $('textarea');
+
+           $submit.on('click', function() {
+               var values = [],
+                   output = '',
+                   i;
+
+               $inputs.each(function(i) {
+                   var index = $inputs[i].name.split('_')[1],
+                       value = +$inputs[i].checked;
+
+                   values[index] = value;
+               });
+
+               values.shift();
+
+               for (i = 0; i < 25; i++) {
+                   if (i % 8 === 0) {
+                       output += ', 0b';
+                   }
+
+                   output += values[i];
+               }
+
+               output = '  {' + output.substring(1) + '0000000 },';
+
+               $result.val($result.val() + output + '\n');
+           });
+
+          $replay.on('click', function() {
+             var sequence = $result.val().replace(/([\{\}]|0b|,)/g, '').split('\n');
+
+             sequence = sequence.map(function(frame) {
+               console.log( "frame: ", frame );
+               return frame.split(' ').splice(3, 4);
+             });
+
+             sequence.pop();
+
+             animate(sequence, 0);
+           });
+
+          var SPEED = 500;
+
+          function animate(sequence, index) {
+              console.log( "Animate tick: ", index );
+              var leds = sequence[index].join('').split('');
+              console.log( leds );
+
+              render( leds );
+
+              if (index + 1 < sequence.length) {
+                setTimeout(animate, SPEED, sequence, index + 1);
+              }
+              else {
+                setTimeout( function() {
+                  $fields.removeClass('selected');
+	}, SPEED );
+              }
+          }
+
+          function render( leds ) {
+              var $fields = $('.field');
+              $fields.removeClass('selected');
+              $fields.each(function() {
+                var $field = $(this);
+
+                if (+leds[$field.data('index') - 1]) {
+                  $field.addClass('selected');
+                }
+              });
+          }
+
+          function parseLine( line ) {
+
+          }
+
+       });
+  </script>
+
+</body>
+</html>
