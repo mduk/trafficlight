@@ -208,17 +208,19 @@ h1 {
       $('input').prop('checked', true);
     });
 
-    $('button.duplicate-and-reverse').on('click', function() {
-      var $textarea = $('textarea');
-      var reversed = $textarea.val().trimRight().split('\n').reverse();
-      $textarea.val( $textarea.val() + reversed.join('\n') );
-    });
-
+    // Invert Selection button
     $('button.invert').on('click', function() {
       $('.field').toggleClass('selected');
       $('input').each( function() {
         $(this).prop('checked', !$(this).prop('checked'));
       } );
+    });
+
+    // Duplicate-and-Reverse button
+    $('button.duplicate-and-reverse').on('click', function() {
+      var $textarea = $('textarea');
+      var reversed = $textarea.val().trimRight().split('\n').reverse();
+      $textarea.val( $textarea.val() + reversed.join('\n') );
     });
 
            var $inputs = $('input'),
