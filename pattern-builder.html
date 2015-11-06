@@ -84,6 +84,7 @@ h1 {
       <legend>Pattern Data</legend>
       <textarea name="name" rows="16" cols="55"></textarea><br/>
       <button class="mirror">Mirror</button>
+      <span class="n-frames"></span> frames.
     </fieldset>
   </div>
 
@@ -228,7 +229,7 @@ h1 {
           } );
       });
 
-      // Duplicate-and-Reverse button
+      // Rotate button
       $('button.rotate').on('click', function() {
           $leds = $pixels.filter('.selected');
 
@@ -241,10 +242,12 @@ h1 {
           });
       });
 
-      // Duplicate-and-Reverse button
+      // Mirror button
       $('button.mirror').on('click', function() {
           var reversed = $result.val().trimRight().split('\n').reverse();
           $result.val( $result.val() + reversed.join('\n') );
+
+          $('span.n-frames').text($result.val().trimRight().split('\n').length);
       });
 
       // Play in a loop button
@@ -293,6 +296,12 @@ h1 {
            output = '  {' + output.substring(1) + '0000000 },';
 
            $result.val($result.val() + output + '\n');
+
+           $('span.n-frames').text($result.val().trimRight().split('\n').length);
+       });
+
+       $('textarea').on('keyup', function() {
+           $('span.n-frames').text($result.val().trimRight().split('\n').length);
        });
   });
   </script>
