@@ -320,7 +320,7 @@ h1 {
            $('span.run-time').text((nFrames * 500) / 1000)
        });
 
-       $('textarea').on('keyup', function() {
+       $('textarea').on('keyup input', function() {
            var nFrames = $result.val().trimRight().split('\n').length;
            $('span.n-frames').text(nFrames);
            $('span.run-time').text((nFrames * 500) / 1000)
