@@ -43,9 +43,6 @@
 // This is the binary representation of the patterns that are displayed on the traffic light.
 //   Here blank lines seperate each pattern to make it easier for humans to see where one pattern ends
 //   and the other begins. The computer however just sees one continuous block of data.
-//
-//   The first parameter in the square brackets needs to be the total number of lines contained within
-//   the block.
 const byte patternData[][4] PROGMEM = {
   
   // Pattern A: Off
