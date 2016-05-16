@@ -8,6 +8,13 @@
 // The data.
 
 
+
+// ----------------------------------------------------------------------------------------------------
+// Define how long we want to show each frame for
+#define TIME_PER_FRAME 500
+
+
+
 // ----------------------------------------------------------------------------------------------------
 // First off we need to tell the computer how many patterns it knows about. This is so that the data
 // structures for the parameters below can be sized correctly in memory.
@@ -363,7 +370,7 @@ void loop() {
 
   // ----------------------------------------------------------------------------------------------------
   // Hold for a moment so our eyes have a chance to distinguish the frame
-  delay( 500 );
+  delay( TIME_PER_FRAME );
 }
 
 
