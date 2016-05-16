@@ -116,9 +116,6 @@ const byte patternData[][4] PROGMEM = {
   { 0b00000000, 0b00000000, 0b00100011, 0b10000000 },
   { 0b00000000, 0b00001000, 0b00100011, 0b10000000 },
   { 0b00000010, 0b00001000, 0b00100011, 0b10000000 }
-
-
-
   
 };
 
@@ -205,6 +202,8 @@ void shiftOutFourBytes( byte one, byte two, byte three, byte four ) {
   shiftOut( PIN_DATA, PIN_CLOCK, LSBFIRST, two );
   shiftOut( PIN_DATA, PIN_CLOCK, LSBFIRST, one );
 }
+
+
 
 // ####################################################################################################
 // This block of code will be run once when we turn on the traffic light.
@@ -395,11 +394,4 @@ void loop() {
   // Hold for a moment so our eyes have a chance to distinguish the frame
   delay( TIME_PER_FRAME );
 }
-
-
-
-
-
-
-
 
