@@ -193,8 +193,7 @@ int redLightPatternPreviousFrame = 0;
 
 // ----------------------------------------------------------------------------------------------------
 // This function takes care of the latching signal, lets us set it HIGH or LOW.
-void latch( int state )
-{
+void latch( int state ) {
   digitalWrite( PIN_LATCH, state );
 }
 
