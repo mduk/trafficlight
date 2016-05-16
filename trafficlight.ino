@@ -11,13 +11,24 @@
 
 
 // ####################################################################################################
-// The data.
+// The configuration.
+
+
+
+// ----------------------------------------------------------------------------------------------------
+// Define the Baud rate to communicate with the serial client
+#define BAUD_RATE 9600
 
 
 
 // ----------------------------------------------------------------------------------------------------
 // Define how long we want to show each frame for
 #define TIME_PER_FRAME 500
+
+
+
+// ####################################################################################################
+// The data.
 
 
 
@@ -206,7 +217,7 @@ void setup() {
 
 
   // Start a serial connection over USB, this is our text console and user interface.
-  Serial.begin( 9600 );
+  Serial.begin( BAUD_RATE );
 
 
   
