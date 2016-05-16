@@ -1,8 +1,14 @@
+#include <avr/pgmspace.h>
+
+
+
 // ####################################################################################################
 // Define what pins on the chip we want to use for what signals.
 #define PIN_CLOCK 12
 #define PIN_DATA 11
 #define PIN_LATCH 8
+
+
 
 // ####################################################################################################
 // The data.
@@ -29,7 +35,7 @@
 //
 //   The first parameter in the square brackets needs to be the total number of lines contained within
 //   the block.
-int patternData[ 53 ][4] = {
+const byte patternData[][4] PROGMEM = {
   
   // Pattern A: Off
   // Pattern B: Fill Up
@@ -323,11 +329,16 @@ void loop() {
     redLightPatternPreviousFrame = 0;
   }
 
-  // Grab the frame to display
-  int* redLightFrame = patternData[ redLightNextFrameLocation ];
+  // Create a pointer to the start address (in memory) of the frame to display
+  const byte* redLightFrame = patternData[ redLightNextFrameLocation ];
 
   // Send the data to the light
-  shiftOutFourBytes( redLightFrame[0], redLightFrame[1], redLightFrame[2], redLightFrame[3]);
+  shiftOutFourBytes(
+    pgm_read_byte_near( redLightFrame ),
+    pgm_read_byte_near( redLightFrame + 1 ),
+    pgm_read_byte_near( redLightFrame + 2 ),
+    pgm_read_byte_near( redLightFrame + 3 )
+  );
 
   // Now that we've output the frame, increment the previous frame pointer
   redLightPatternPreviousFrame++;
@@ -346,11 +357,16 @@ void loop() {
     greenLightPatternPreviousFrame = 0;
   }
 
-  // Grab the frame to display
-  int* greenLightFrame = patternData[ greenLightNextFrameLocation ];
+  // Create a pointer to the start address (in memory) of the frame to display
+  const byte* greenLightFrame = patternData[ greenLightNextFrameLocation ];
 
   // Send the data to the light
-  shiftOutFourBytes( greenLightFrame[0], greenLightFrame[1], greenLightFrame[2], greenLightFrame[3]);
+  shiftOutFourBytes(
+    pgm_read_byte_near( greenLightFrame ),
+    pgm_read_byte_near( greenLightFrame + 1 ),
+    pgm_read_byte_near( greenLightFrame + 2 ),
+    pgm_read_byte_near( greenLightFrame + 3 )
+  );
 
   // Now that we've output the frame, increment the previous frame pointer
   greenLightPatternPreviousFrame++;
