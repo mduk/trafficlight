@@ -219,7 +219,7 @@ void setup() {
   
   // We require three pins to communicate with the traffic light.
   //   A Latch to tell the traffic light when we have finished writing data to it.
-  //   A Clock signal so the traffic light and the computer can stay in sync
+  //   A Clock signal so the traffic light and the computer can stay in sync.
   //   A Data signal to carry the data to the traffic light.
   pinMode( PIN_LATCH, OUTPUT );
   pinMode( PIN_CLOCK, OUTPUT );
@@ -257,7 +257,7 @@ void setup() {
 
 // ####################################################################################################
 // After the setup code has been run, this block of code is run over and over and over until the end
-// of time. Or until we turn it off, whichever comes firt.
+// of time. Or until we turn it off, whichever comes first.
 void loop() {
 
 
