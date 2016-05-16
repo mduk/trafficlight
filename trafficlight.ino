@@ -263,10 +263,10 @@ void loop() {
 
 
     // If the byte is within the lowercase range, then change the Green light.
-    if ( c >= 97 && c <= 122 ) {
+    if ( c >= 'a' && c <= 'z' ) {
       
       // Subtract the base number to get a 0 to 26 integer (representing 'a' through 'z')
-      int pattern = c - 97;
+      int pattern = c - 'a';
 
       // Set the light's active pattern
       greenLightPattern = pattern;
@@ -278,10 +278,10 @@ void loop() {
 
 
     // If the byte is within the uppercase range, then change the Red light.
-    if ( c >= 65 && c <= 90 ) {
+    if ( c >= 'A' && c <= 'Z' ) {
       
       // Subtract the base number to get a 0 to 26 integer (representing 'A' through 'Z')
-      int pattern = c - 65;
+      int pattern = c - 'A';
       
       // Set the light's active pattern
       redLightPattern = pattern;
